@@ -13,7 +13,7 @@ using System.Threading;
 using TensorFlow;
 
 
-public class AccelerometerInputCNN : MonoBehaviour
+public class AccelerometerInputCNNGo : MonoBehaviour
 {
 	// set per person
 	private float height = GlobalVariables.height;

@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class AccelerometerInput4 : MonoBehaviour
+public class AccelerometerInputGo : MonoBehaviour
 {
     // used to determine direction to walk
     private float yaw;

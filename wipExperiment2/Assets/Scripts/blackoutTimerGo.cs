@@ -22,13 +22,13 @@ public class blackoutTimerGo : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		velocity = AccelerometerInput4.velocity;
+		velocity = AccelerometerInputGo.velocity;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		velocity = AccelerometerInput4.velocity;
+		velocity = AccelerometerInputGo.velocity;
 		OVRInput.Update ();
 		walkingStateMachine ();
 	}

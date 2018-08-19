@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class AccelerometerInput4Old : MonoBehaviour {
+public class AccelerometerInput4Gear : MonoBehaviour {
     private float yaw;
     private float rad;
     private float xVal;

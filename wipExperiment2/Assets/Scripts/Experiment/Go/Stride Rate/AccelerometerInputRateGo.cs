@@ -8,7 +8,7 @@ using System.Text;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class AccelerometerInputRate : MonoBehaviour {
+public class AccelerometerInputRateGo : MonoBehaviour {
 
     // set per person - NEED TO GET HIGH AND LOW THRESHOLDS 
 	// set per person - NEED TO GET HIGH AND LOW THRESHOLDS 
