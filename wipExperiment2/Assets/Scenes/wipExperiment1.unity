@@ -1536,6 +1536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   subtrial: 0
+  resumeText: 
 --- !u!114 &1377640033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1635,8 +1636,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e0be3a8083dc745952e2a16bb47832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subjectNumber: 0
-  trialNumber: 4
+  subjectNumber: 5
+  trialNumber: 0
 --- !u!114 &1377640040
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -215,4 +215,16 @@ public class WalkingTechManager : MonoBehaviour {
 	public static string walkingType(){
 		return conditionOrder [statTrial].ToString ();
 	}
+
+	public static void advanceTrial(){
+		walkingEnabled (false);
+		singleton.trialNumber++;
+		statTrial++;
+	}
+
+	public static void setTrial(int newTrial){
+		walkingEnabled (false);
+		singleton.trialNumber = newTrial;
+		statTrial = newTrial;
+	}
 }

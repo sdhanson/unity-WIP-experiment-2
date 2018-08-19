@@ -123,7 +123,7 @@ public class AccelerometerInputCNNGear : MonoBehaviour
     {
         // send the current transform data to the server (should probably be wrapped in an if isAndroid but I haven't tested)
 
-        string path = Application.persistentDataPath + "/WIP_CNN_GEAR.txt";
+		string path = Application.persistentDataPath + "/" + WalkingTechManager.statSubject + "_" + WalkingTechManager.walkingType () + ".txt";
 
         // debugging output
 		string appendText = "\n" + DateTime.Now.ToString() + ";" + 

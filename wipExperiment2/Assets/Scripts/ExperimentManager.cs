@@ -49,46 +49,69 @@ public class ExperimentManager : MonoBehaviour {
 	//How to tell if oculus button is pressed: OVRInput.Get(OVRInput.Button.One)
 
 	// Use this for initialization
+	public string resumeText;
 	void Start () {
 		blackCube = GameObject.Find ("Black Cube");
 		puck = GameObject.Find ("hocket puck");
 		maze = GameObject.Find ("Maze 2");
 		blackCube.SetActive (false);
 		puck.SetActive (false);
-		maze.SetActive (true);
-
-		//File.AppendAllText (Application.persistentDataPath + subjectID.ToString() + ".txt", "New Run" + "/n");
+		maze.SetActive (false);
 
 	}
 
+	private static int START_SCENE = -4;
+	private static int NEXT_TECH_SCENE = -3;
 	private static int LEARNING_SCENE = -2;
 	private static int LONG_WAIT_SCENE = -1;
 	private static int DESERT_SCENE = 0;
 	private static int PUCK_SCENE = 1;
 	private static int BLACK_SCENE = 2;
 	private static int WAIT_SCENE = 3;
-	private int scene = LEARNING_SCENE;
+	private int scene = START_SCENE;
 	private float timer = 0f;
 	
 	// Update is called once per frame
 	void Update () {
-		string path = Application.persistentDataPath + "/" + WalkingTechManager.statSubject + "_" + WalkingTechManager.walkingType() + ".txt";
+		string path = Application.persistentDataPath + "/" + WalkingTechManager.statSubject + "_" + WalkingTechManager.walkingType() + "_results.txt";
+		string trialPath = Application.persistentDataPath + "/" + WalkingTechManager.statSubject + "_trials.txt";
 
+		//update the input from the oculus go controller
 		OVRInput.Update ();
-		//at this point the other script has selected the appropriate method of walking, this component can be enabled and disabled as needed
-		if (scene == LEARNING_SCENE) {
-			if (Input.GetMouseButtonDown(0)){
+		//begin state machine
+		if (scene == START_SCENE) { //load in previous state, if no previous state then assume beginning
+			WalkingTechManager.walkingEnabled (false);
+			try{ //try to load from the trial file and set the variables
+				resumeText = File.ReadAllText (trialPath);
+				subtrial =(int)Char.GetNumericValue(resumeText [2]); subtrial++;
+				Debug.Log ((int)Char.GetNumericValue(resumeText [2]));
+				WalkingTechManager.setTrial ((int)Char.GetNumericValue (resumeText [0]));
+				if (subtrial == 9) { //if we ended at trial 9, then the next subtrial is 0 and we advance the trial
+					WalkingTechManager.advanceTrial ();
+					subtrial = 0;
+					scene = NEXT_TECH_SCENE;
+				} else {
+					scene = DESERT_SCENE;
+				}
+			} catch {
+				scene = NEXT_TECH_SCENE;
+			}
+		} else if (scene == NEXT_TECH_SCENE) {
+			if (subtrial == 0) {
 				maze.SetActive (true);
-				puck.SetActive (false);
+				WalkingTechManager.walkingEnabled (true);
+				scene = LEARNING_SCENE;
+			} else
+				scene = DESERT_SCENE;
+		} else if (scene == LEARNING_SCENE) {
+			if (Input.GetMouseButtonDown (0)) {
 				blackCube.SetActive (false);
 				timer = Time.time + 5;
 				scene = LONG_WAIT_SCENE;
 			}
 		}else if (scene == LONG_WAIT_SCENE) {
 			if (Time.time > timer){
-				maze.SetActive (false)	;
-				puck.SetActive (false);
-				blackCube.SetActive (false);
+				maze.SetActive (false);
 				WalkingTechManager.walkingEnabled (false);
 				this.transform.position = new Vector3 (0f, GlobalVariables.height, 0f);
 				puck.transform.position = new Vector3 ((float)puckDist [WalkingTechManager.statSubject * 7 + WalkingTechManager.statTrial, subtrial], 0f, 0f);
@@ -97,21 +120,17 @@ public class ExperimentManager : MonoBehaviour {
 		}else if (scene == DESERT_SCENE) {
 			if (Input.GetMouseButtonDown(0)){
 				puck.SetActive (true);
-				blackCube.SetActive (false);
 				//set puck location
 				scene = PUCK_SCENE;
 			}
 		}else if (scene == PUCK_SCENE) {
 			if (Input.GetMouseButtonDown(0)){
-				puck.SetActive (false);
-				blackCube.SetActive (true);
+				//blackCube.SetActive (true);
 				WalkingTechManager.walkingEnabled (true);
 				scene = BLACK_SCENE;
 			}
 		}else if (scene == BLACK_SCENE) {
 			if (Input.GetMouseButtonDown(0)){
-				puck.SetActive (false);
-				blackCube.SetActive (true);
 				timer = Time.time + 1;
 				scene = WAIT_SCENE;
 			}
@@ -126,16 +145,29 @@ public class ExperimentManager : MonoBehaviour {
 				                    this.transform.position.ToString ("F2") + ";" +
 				                    puck.transform.position.ToString ("F2") + "\r\n";
 				File.AppendAllText (path, appendText);
+
+				//update file to the current trial
+				File.WriteAllText(trialPath, WalkingTechManager.statTrial + "," + subtrial + "\n");
+
 				//reset variables
 				this.transform.position = new Vector3 (0f, GlobalVariables.height, 0f);
 				puck.transform.position = new Vector3 ((float)puckDist [WalkingTechManager.statSubject * 7 + WalkingTechManager.statTrial, subtrial], 0f, 0f);
 				subtrial++;
+
 				if (subtrial < 9) {
 					scene = DESERT_SCENE;
-					blackCube.SetActive (false);
+				}else {
+					subtrial = 0;
+					string test1 = WalkingTechManager.walkingType ();
+					string test2 = test1.Substring (test1.Length - 2);
+					WalkingTechManager.advanceTrial ();
+					string test3 = WalkingTechManager.walkingType ();
+					string test4 = test3.Substring (test3.Length - 2);
+					if (WalkingTechManager.statTrial != 1 && test4 != "ng" && test2 != test4)
+						scene = -100;
+					else
+						scene = NEXT_TECH_SCENE;
 				}
-				else
-					scene = -100;
 			}
 		}
 

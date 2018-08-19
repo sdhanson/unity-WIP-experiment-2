@@ -107,7 +107,7 @@ public class AccelerometerInputRateGo : MonoBehaviour {
     {
         // send the current transform data to the server (should probably be wrapped in an if isAndroid but I haven't tested)
 
-        string path = Application.persistentDataPath + "/WIP_STRIDE_GO.txt";
+		string path = Application.persistentDataPath + "/" + WalkingTechManager.statSubject + "_" + WalkingTechManager.walkingType () + ".txt";
 
         // debug output
 		string appendText = "\n" + DateTime.Now.ToString() + ";" + 

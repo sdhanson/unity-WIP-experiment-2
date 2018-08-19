@@ -39,7 +39,7 @@ public class AccelerometerInput4Gear : MonoBehaviour {
 
 	void FixedUpdate() //was previously FixedUpdate()
 	{
-		string path = Application.persistentDataPath + "/WIP_GEAR_MITI.txt";
+		string path = Application.persistentDataPath + "/" + WalkingTechManager.statSubject + "_" + WalkingTechManager.walkingType () + ".txt";
 
 		// This text is always added, making the file longer over time if it is not deleted
 		string appendText = "\n" + DateTime.Now.ToString() + ";" + 
